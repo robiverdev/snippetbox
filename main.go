@@ -20,7 +20,7 @@ func snippetView(w http.ResponseWriter, r *http.Request) {
 	_, err := w.Write([]byte("Display specific snippet"))
 
 	if err != nil {
-		log.Println("Error writing response:", err)
+		log.Println("Error viewing response:", err)
 		return
 	}
 }
