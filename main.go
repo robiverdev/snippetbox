@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 // Define a home handler function which writes a byte slice
@@ -17,12 +18,14 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func snippetView(w http.ResponseWriter, r *http.Request) {
-	_, err := w.Write([]byte("Display specific snippet"))
+	id, err := strconv.Atoi(r.PathValue("id"))
 
-	if err != nil {
-		log.Println("Error viewing response:", err)
+	if err != nil || id < 1 {
+		http.NotFound(w, r)
 		return
 	}
+	msg := fmt.Sprintf("Display a specific snippet with ID - %d", id)
+	w.Write([]byte(msg))
 }
 
 func snippetCreate(w http.ResponseWriter, r *http.Request) {
@@ -35,9 +38,9 @@ func snippetCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	mux := http.NewServeMux() // Initialize new mux server
-	mux.HandleFunc("/", home) // response body - / catch all
-	mux.HandleFunc("/snippet/view", snippetView)
+	mux := http.NewServeMux()                         // Initialize new mux server
+	mux.HandleFunc("/{$}", home)                      // response body - / catch all - /{$} match a single slash, followed by nothing else
+	mux.HandleFunc("/snippet/view/{id}", snippetView) // {id} wildcard
 	mux.HandleFunc("/snippet/create", snippetCreate)
 
 	log.Print("Starting server on :4000")
