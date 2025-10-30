@@ -25,7 +25,11 @@ func snippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	msg := fmt.Sprintf("Display a specific snippet with ID - %d", id)
-	w.Write([]byte(msg))
+	_, err := w.Write([]byte(msg))
+	if err != nil {
+		log.Printf("Error writing response: %v", err)
+		return
+	}
 }
 
 func snippetCreate(w http.ResponseWriter, r *http.Request) {
