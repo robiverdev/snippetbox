@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -15,9 +16,29 @@ func home(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func snippetView(w http.ResponseWriter, r *http.Request) {
+	_, err := w.Write([]byte("Display specific snippet"))
+
+	if err != nil {
+		log.Println("Error writing response:", err)
+		return
+	}
+}
+
+func snippetCreate(w http.ResponseWriter, r *http.Request) {
+	_, err := w.Write([]byte("Display a form for creating a new snippet"))
+
+	if err != nil {
+		fmt.Println("Error creating response:", err)
+		return
+	}
+}
+
 func main() {
 	mux := http.NewServeMux() // Initialize new mux server
 	mux.HandleFunc("/", home) // response body - / catch all
+	mux.HandleFunc("/snippet/view", snippetView)
+	mux.HandleFunc("/snippet/create", snippetCreate)
 
 	log.Print("Starting server on :4000")
 
