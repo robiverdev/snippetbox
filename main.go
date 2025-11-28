@@ -37,11 +37,20 @@ func snippetCreate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func snippetCreatePost(w http.ResponseWriter, r *http.Request) {
+	_, err := w.Write([]byte("Save new snippet..."))
+
+	if err != nil {
+		fmt.Println("Error saving a snippet:", err)
+	}
+}
+
 func main() {
-	mux := http.NewServeMux()    // Initialize a new servermux
-	mux.HandleFunc("/{$}", home) // Register the home function as handler for the "/" URL pattern. {$} - match a single slash, followed by nothing else
-	mux.HandleFunc("/snippet/view/{id}", snippetView)
-	mux.HandleFunc("/snippet/create", snippetCreate)
+	mux := http.NewServeMux()        // Initialize a new servermux
+	mux.HandleFunc("GET /{$}", home) // Register the home function as handler for the "/" URL pattern. {$} - match a single slash, followed by nothing else
+	mux.HandleFunc("GET /snippet/view/{id}", snippetView)
+	mux.HandleFunc("GET /snippet/create", snippetCreate)
+	mux.HandleFunc("POST /snippet/create", snippetCreatePost)
 
 	log.Print("Starting server on: 4000") // Print a log message
 
